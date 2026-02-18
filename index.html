@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sağlık Takip - Anne için</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🌿 Sağlık Takip Sistemi</h1>
+            <p class="subtitle">Sağlıklı yaşam için günlük takip</p>
+            <div class="date-display" id="currentDate"></div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="gunluk">Günlük</button>
+            <button class="tab-btn" data-tab="haftalik">Haftalık</button>
+            <button class="tab-btn" data-tab="aylik">Aylık</button>
+            <button class="tab-btn" data-tab="yillik">Yıllık</button>
+            <button class="tab-btn" data-tab="kurallar">Kurallar</button>
+            <button class="tab-btn" data-tab="istatistik">İstatistik</button>
+        </nav>
+
+        <!-- Günlük Tab -->
+        <div class="tab-content active" id="gunluk">
+            <div class="card">
+                <h2>📅 Günlük Görevler</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="gunlukProgress"></div>
+                    <span class="progress-text" id="gunlukProgressText">0%</span>
+                </div>
+                <ul class="checklist" id="gunlukList"></ul>
+                <button class="reset-btn" onclick="resetDaily()">🔄 Günlük Sıfırla</button>
+            </div>
+
+            <!-- Günlük Notlar -->
+            <div class="card">
+                <h3>📝 Bugünün Notları</h3>
+                <textarea id="dailyNotes" placeholder="Semptomlar, yedikleriniz, nasıl hissettiğiniz..."></textarea>
+                <button class="save-btn" onclick="saveDailyNotes()">💾 Notu Kaydet</button>
+            </div>
+
+            <!-- Kilo & Tansiyon Takibi -->
+            <div class="card">
+                <h3>⚖️ Kilo & Tansiyon Kaydet</h3>
+                <div class="input-group">
+                    <label>Kilo (kg):</label>
+                    <input type="number" id="weightInput" step="0.1" placeholder="65.5">
+                </div>
+                <div class="input-group">
+                    <label>Tansiyon (Sistolik/Diastolik):</label>
+                    <div class="tansiyon-inputs">
+                        <input type="number" id="systolicInput" placeholder="120">
+                        <span>/</span>
+                        <input type="number" id="diastolicInput" placeholder="80">
+                    </div>
+                </div>
+                <button class="save-btn" onclick="saveVitals()">💾 Kaydet</button>
+            </div>
+        </div>
+
+        <!-- Haftalık Tab -->
+        <div class="tab-content" id="haftalik">
+            <div class="card">
+                <h2>📆 Haftalık Görevler</h2>
+                <p class="week-info">Hafta: <span id="weekNumber"></span></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="haftalikProgress"></div>
+                    <span class="progress-text" id="haftalikProgressText">0%</span>
+                </div>
+                <ul class="checklist" id="haftalikList"></ul>
+                <button class="reset-btn" onclick="resetWeekly()">🔄 Haftalık Sıfırla</button>
+            </div>
+        </div>
+
+        <!-- Aylık Tab -->
+        <div class="tab-content" id="aylik">
+            <div class="card">
+                <h2>📋 Aylık Görevler</h2>
+                <p class="month-info">Ay: <span id="monthName"></span></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="aylikProgress"></div>
+                    <span class="progress-text" id="aylikProgressText">0%</span>
+                </div>
+                <ul class="checklist" id="aylikList"></ul>
+                <button class="reset-btn" onclick="resetMonthly()">🔄 Aylık Sıfırla</button>
+            </div>
+        </div>
+
+        <!-- Yıllık Tab -->
+        <div class="tab-content" id="yillik">
+            <div class="card">
+                <h2>🏥 Yıllık Kontroller</h2>
+                <p class="year-info">Yıl: <span id="yearNumber"></span></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="yillikProgress"></div>
+                    <span class="progress-text" id="yillikProgressText">0%</span>
+                </div>
+                <ul class="checklist" id="yillikList"></ul>
+                <button class="reset-btn" onclick="resetYearly()">🔄 Yıllık Sıfırla</button>
+            </div>
+        </div>
+
+        <!-- Kurallar Tab -->
+        <div class="tab-content" id="kurallar">
+            <div class="card rules-card">
+                <h2>⭐ En Önemli 10 Kural</h2>
+                <ul class="rules-list" id="rulesList"></ul>
+            </div>
+
+            <div class="card warning-card">
+                <h2>❌ Kesin Uzak Durulacaklar</h2>
+                
+                <h3>🍽️ Beslenmede</h3>
+                <ul class="warning-list" id="foodWarnings"></ul>
+
+                <h3>🥗 Crohn İntoleransları</h3>
+                <ul class="warning-list" id="crohnWarnings"></ul>
+
+                <h3>⏰ Zamanlama & Porsiyon</h3>
+                <ul class="warning-list" id="timingWarnings"></ul>
+
+                <h3>🏃 Fiziksel Olarak</h3>
+                <ul class="warning-list" id="physicalWarnings"></ul>
+
+                <h3>🌡️ Çevresel & Stres</h3>
+                <ul class="warning-list" id="environmentWarnings"></ul>
+            </div>
+        </div>
+
+        <!-- İstatistik Tab -->
+        <div class="tab-content" id="istatistik">
+            <div class="card">
+                <h2>📊 Kilo Takibi</h2>
+                <canvas id="weightChart"></canvas>
+                <div id="weightHistory"></div>
+            </div>
+
+            <div class="card">
+                <h2>💓 Tansiyon Takibi</h2>
+                <canvas id="bpChart"></canvas>
+                <div id="bpHistory"></div>
+            </div>
+
+            <div class="card">
+                <h2>📈 Genel İlerleme</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Bugün Tamamlanan</div>
+                        <div class="stat-value" id="todayComplete">0/0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Bu Hafta Tamamlanan</div>
+                        <div class="stat-value" id="weekComplete">0/0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Bu Ay Tamamlanan</div>
+                        <div class="stat-value" id="monthComplete">0/0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Bu Yıl Tamamlanan</div>
+                        <div class="stat-value" id="yearComplete">0/0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🗂️ Veri Yönetimi</h2>
+                <button class="export-btn" onclick="exportData()">📥 Verileri İndir (JSON)</button>
+                <div class="import-section">
+                    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+                    <button class="import-btn" onclick="document.getElementById('importFile').click()">📤 Verileri Yükle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
